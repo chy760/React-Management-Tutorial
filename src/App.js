@@ -31,7 +31,7 @@ const customers = [
 }
 ]
 
-// class 변경
+// class 변경, 배열데이터를 map함수를 사용하여 컴포넌트에 props로 보냄
 class App extends Component {
   render() {
     return (
