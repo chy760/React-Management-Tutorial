@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Customer from './components/Customer';
 import './App.css';
 
-// 출력데이터 배열 형태로 변경
+// 데이터 배열 형태로 변경
 const customers = [
 {
   'id': 1,
