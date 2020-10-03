@@ -1,4 +1,6 @@
 import React from 'react';
+import TableRow from '@material-ui/core/TableRow';      //material-ui의 table row 불러옴
+import TableCell from '@material-ui/core/TableCell';    //material-ui의 table cell 불러옴
 
 // Customer 클래스는 React.Component로 부터 상속
 // 한명의 정보를 두개 항목으로 나누어 계층적 표현
@@ -7,10 +9,14 @@ class Customer extends React.Component {
     render() {
         // 컴포넌트 리턴
         return (
-            <div>
-                <CustomerProfile id={this.props.id} image={this.props.image} name={this.props.name}/>
-                <CustomerInfo birthday={this.props.birthday} gender={this.props.gender} job={this.props.job}/>
-            </div>
+            <TableRow>
+                <TableCell>{this.props.id}</TableCell>
+                <TableCell><img src={this.props.image} alt="profile"/></TableCell>
+                <TableCell>{this.props.name}</TableCell>
+                <TableCell>{this.props.birthday}</TableCell>
+                <TableCell>{this.props.gender}</TableCell>
+                <TableCell>{this.props.job}</TableCell>
+            </TableRow>
         )
     }
 }
