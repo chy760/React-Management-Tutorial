@@ -21,36 +21,35 @@ const styles = theme => ({
   }
 })
 
-// 데이터 배열 형태로 변경
-const customers = [
-{
-  'id': 1,
-  'image': 'https://placeimg.com/64/64/1',
-  'name': '홍길동',
-  'birthday': '961222',
-  'gender': '남자',
-  'job': '대학생'
-},
-{
-  'id': 2,
-  'image': 'https://placeimg.com/64/64/2',
-  'name': '고길동',
-  'birthday': '901122',
-  'gender': '남자',
-  'job': '직장인'
-},
-{
-  'id': 3,
-  'image': 'https://placeimg.com/64/64/3',
-  'name': '도우너',
-  'birthday': '991022',
-  'gender': '남자',
-  'job': '고등학생'
-}
-]
-
 // class 변경, 배열데이터를 map함수를 사용하여 컴포넌트에 props로 보냄
 class App extends Component {
+  // 데이터가 변경 될 수 있으므로 state를 사용하여 customer 변수를 명시
+  // 처음에는 데이터가 비어있는 상태
+  state = {
+    customers: ""
+  }
+
+  // 서버에 접속하여 데이터를 받아오는 역할을 하는 함수 componetDidMount()
+  componentDidMount() {
+    // 불러올 api함수 지정
+    this.callApi()
+      // 반환되어진 json 형태의 고객데이터를 res변수로 받아서
+      // setState를 이용하여 customer에 넣는다.
+      .then(res => this.setState({customers: res}))
+      // 에러 발생시 console창에 에러로그를 넣는다.
+      .catch(err => console.log(err));
+  }
+
+  // 비동기 방식 처리
+  callApi = async () => {
+    // localhost:5000/api/customer 경로에 접근하여 데이터를 response에 담는다.
+    const response = await fetch('/api/customers');
+    // response에 담은 데이터를 json 형태 body에 담는다
+    const body = await response.json();
+    // body에 담은 json 형태의 고객데이를 반환한다.
+    return body;
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -68,7 +67,8 @@ class App extends Component {
           </TableHead>
           <TableBody>
             {// 반복문을 사용하기 위해 컴포넌트 map을 사용하여 배열데이터 표현
-              customers.map(c => {
+              // 데이터가 있을 경우에 노출되며, 데이터가 없을 경우 빈값 노출
+              this.state.customers ? this.state.customers.map(c => {
                 return (
                   <Customer
                     key={c.id}  // map 사용기 key값은 필수(화면 속도)
@@ -80,7 +80,7 @@ class App extends Component {
                     job={c.job}
                   />
                 )
-              })
+              }) : ""
             }
           </TableBody>
         </Table>
