@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 // Customer 컴포넌트 불러옴
 import Customer from './components/Customer';
 import './App.css';
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
+import Paper from '@material-ui/core/Paper';                        // paper 최상단 스타일시스 적용
+import Table from '@material-ui/core/Table';                        // table
+import TableHead from '@material-ui/core/TableHead';                // table head
+import TableBody from '@material-ui/core/TableBody';                // table body
+import TableRow from '@material-ui/core/TableRow';                  // table row
+import TableCell from '@material-ui/core/TableCell';                // table cell
+import CircularProgress from '@material-ui/core/CircularProgress';  // progress bar
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
@@ -18,19 +19,46 @@ const styles = theme => ({
   },
   table: {
     minWidth: 1080
+  },
+  progress: {
+    margin: theme.spacing.unit * 2
   }
 })
+
+/*
+
+React의 Component 라이프 사이클
+
+1) constructor()
+
+2) componentWillMount()
+
+3) render()
+
+4) componentDidMount()
+
+*/
+
+/*
+
+상태관리(비동기)
+props or state => shouldComponentUpdate()
+
+*/
 
 // class 변경, 배열데이터를 map함수를 사용하여 컴포넌트에 props로 보냄
 class App extends Component {
   // 데이터가 변경 될 수 있으므로 state를 사용하여 customer 변수를 명시
   // 처음에는 데이터가 비어있는 상태
   state = {
-    customers: ""
+    customers: "",  // 리스트 변수 선언(map 반복문에 사용)
+    completed: 0    // 정수형 변수 선언(progress bar에 사용)
   }
 
-  // 서버에 접속하여 데이터를 받아오는 역할을 하는 함수 componetDidMount()
+  // 서버에 접속하여 비동기 방식으로 데이터를 받아오는 역할을 하는 함수 componetDidMount()
   componentDidMount() {
+    // timer을 사용하여, 0.02초 마다 progress함수를 호출
+    this.timer = setInterval(this.progress, 20);
     // 불러올 api함수 지정
     this.callApi()
       // 반환되어진 json 형태의 고객데이터를 res변수로 받아서
@@ -40,7 +68,7 @@ class App extends Component {
       .catch(err => console.log(err));
   }
 
-  // 비동기 방식 처리
+  // api 호출 함수(비동기)
   callApi = async () => {
     // localhost:5000/api/customer 경로에 접근하여 데이터를 response에 담는다.
     const response = await fetch('/api/customers');
@@ -48,6 +76,14 @@ class App extends Component {
     const body = await response.json();
     // body에 담은 json 형태의 고객데이를 반환한다.
     return body;
+  }
+
+  // progress bar 함수(비동기)
+  progress = () => {
+    // state 변수 가져온다.
+    const { completed } = this.state;
+    // completed 변수가 100 되면 0 으로 바꾸고, 그렇지 않으면 + 1을 한다.
+    this.setState({ completed: completed >= 100 ? 0 : completed + 1 })
   }
 
   render() {
@@ -80,7 +116,12 @@ class App extends Component {
                     job={c.job}
                   />
                 )
-              }) : ""
+              }) :
+              <TableRow>
+                <TableCell colSpan="6" align="center">
+                  <CircularProgress className={classes.progress} variant="determinate" value={this.state.completed}/>
+                </TableCell>
+              </TableRow>
             }
           </TableBody>
         </Table>
