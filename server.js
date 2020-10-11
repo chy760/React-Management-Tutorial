@@ -24,7 +24,7 @@ const connection = mysql.createConnection({
 // DB 연결
 connection.connect();
 
-// http://localhost:5000/api/customers 접근시 고객데이터 출력
+// http://localhost:5000/api/customers 접근시 db customer 테이블에 접근하여 고객데이터 출력
 app.get('/api/customers', (req, res) => {
     // query함수를 이용하여 쿼리 호출
     connection.query(
