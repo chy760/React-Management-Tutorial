@@ -1,4 +1,4 @@
-const fs = require('fs');                   // fs 파일접근 라이브러리 사용
+const fs = require('fs');                   // fs 파일접근, database.json(mysql 환경설정) 정보 읽어옴.
 const express = require('express');         // express 불러옴
 const bodyParser = require('body-parser');  // body-parser 불러옴
 const app = express();                      // app을 통해 express 사용
@@ -29,6 +29,7 @@ connection.connect();
 app.get('/api/customers', (req, res) => {
     // query함수를 이용하여 쿼리 호출
     connection.query(
+        // 실제 사용되어질 query
         "SELECT * FROM CUSTOMER",
         // 쿼리문의 결과값을 rows에 담는다
         (err, rows, fields) => {
