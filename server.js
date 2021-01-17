@@ -2,7 +2,7 @@ const fs = require('fs');                   // fs 파일접근 라이브러리 �
 const express = require('express');         // express 불러옴
 const bodyParser = require('body-parser');  // body-parser 불러옴
 const app = express();                      // app을 통해 express 사용
-const port = process.env.port || 5000;      // port 5000 사용
+const port = process.env.port || 5000;      // 서버 port 5000 사용
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -24,13 +24,15 @@ const connection = mysql.createConnection({
 // DB 연결
 connection.connect();
 
-// http://localhost:5000/api/customers 접근시 db customer 테이블에 접근하여 고객데이터 출력
+// 클라이언트가 api(http://localhost:5000/api/customers) 
+// 접근시 db customer 테이블에 접근하여 고객데이터 출력
 app.get('/api/customers', (req, res) => {
     // query함수를 이용하여 쿼리 호출
     connection.query(
         "SELECT * FROM CUSTOMER",
         // 쿼리문의 결과값을 rows에 담는다
         (err, rows, fields) => {
+            // 클라이언트에게 데이터 반환
             res.send(rows);
         }
     );

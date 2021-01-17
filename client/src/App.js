@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-// Customer 컴포넌트 불러옴
-import Customer from './components/Customer';
+import Customer from './components/Customer';                       // Customer 컴포넌트 불러옴
 import './App.css';
 import Paper from '@material-ui/core/Paper';                        // paper 최상단 스타일시스 적용
 import Table from '@material-ui/core/Table';                        // table
@@ -61,8 +60,8 @@ class App extends Component {
     this.timer = setInterval(this.progress, 20);
     // 불러올 api함수 지정
     this.callApi()
-      // 반환되어진 json 형태의 고객데이터를 res변수로 받아서
-      // setState를 이용하여 customer에 넣는다.
+      // .then()함수를 통해서 변수의 이름이 res로 변경됨.
+      // 반환되어진 json 형태의 고객데이터를 res변수로 받아서 setState를 이용하여 customer에 데이터 갱신함.
       .then(res => this.setState({customers: res}))
       // 에러 발생시 console창에 에러로그를 넣는다.
       .catch(err => console.log(err));
@@ -71,10 +70,12 @@ class App extends Component {
   // api 호출 함수(비동기)
   callApi = async () => {
     // localhost:5000/api/customer 경로에 접근하여 데이터를 response에 담는다.
+    // await /api/customers API가 끝나는 것을 기다림(성공/실패와는 상관 없음)
     const response = await fetch('/api/customers');
     // response에 담은 데이터를 json 형태 body에 담는다
     const body = await response.json();
     // body에 담은 json 형태의 고객데이를 반환한다.
+    console.log(body);
     return body;
   }
 
@@ -87,6 +88,7 @@ class App extends Component {
   }
 
   render() {
+    // props는 변경 될 수 없는 데이터일 경우 명시
     const { classes } = this.props;
     return (
       <Paper className={classes.root}>
@@ -102,8 +104,9 @@ class App extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {// 반복문을 사용하기 위해 컴포넌트 map을 사용하여 배열데이터 표현
-              // 데이터가 있을 경우에 노출되며, 데이터가 없을 경우 빈값 노출
+            { // state 값으로 변경이 되었기 때문에 this.state.customers... 코드 변경해야됨.
+              // this.state.customers에 데이터가 존재하는 경우 데이터 출력, 아닐경우 빈값 노출, 이미지 노출.
+              // 반복문을 사용하기 위해 컴포넌트 map을 사용하여 배열데이터 표현
               this.state.customers ? this.state.customers.map(c => {
                 return (
                   <Customer
