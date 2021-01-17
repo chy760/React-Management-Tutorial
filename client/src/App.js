@@ -28,20 +28,17 @@ const styles = theme => ({
 
 React의 Component 라이프 사이클
 
-1) constructor()
+1) constructor() : constructor() 불러옴.
 
-2) componentWillMount()
+2) componentWillMount() : 마운트가 되기전에 componentWillMount() 불러옴.
 
-3) render()
+3) render() : 컴포넌트를 화면에 그림.
 
-4) componentDidMount()
+4) componentDidMount() : 컴포넌트를 화면에 그린 후에 componentDidMount()가 불러움
 
-*/
-
-/*
-
-상태관리(비동기)
-props or state => shouldComponentUpdate()
+상태관리(비동기) : 상태변화
+props or state => shouldComponentUpdate() : props or state 변경 되어질 경우에 shouldComponentUpdate()등이 사용되어
+                                            다시한번 render() 함수를 불러와서 화면을 다시 그림(갱신).
 
 */
 
@@ -51,7 +48,7 @@ class App extends Component {
   // 처음에는 데이터가 비어있는 상태
   state = {
     customers: "",  // 리스트 변수 선언(map 반복문에 사용)
-    completed: 0    // 정수형 변수 선언(progress bar에 사용)
+    completed: 0    // 정수형 변수 선언(progress bar에 사용, 0% ~ 100%)
   }
 
   // 서버에 접속하여 비동기 방식으로 데이터를 받아오는 역할을 하는 함수 componetDidMount()
@@ -65,6 +62,15 @@ class App extends Component {
       .then(res => this.setState({customers: res}))
       // 에러 발생시 console창에 에러로그를 넣는다.
       .catch(err => console.log(err));
+    // progress bar 테스트시 this.callApi() 주석처리
+    /*
+    this.callApi()
+      // .then()함수를 통해서 변수의 이름이 res로 변경됨.
+      // 반환되어진 json 형태의 고객데이터를 res변수로 받아서 setState를 이용하여 customer에 데이터 갱신함.
+      .then(res => this.setState({customers: res}))
+      // 에러 발생시 console창에 에러로그를 넣는다.
+      .catch(err => console.log(err));
+    */
   }
 
   // api 호출 함수(비동기)
@@ -81,7 +87,7 @@ class App extends Component {
 
   // progress bar 함수(비동기)
   progress = () => {
-    // state 변수 가져온다.
+    // completed state 변수 가져온다.
     const { completed } = this.state;
     // completed 변수가 100 되면 0 으로 바꾸고, 그렇지 않으면 + 1을 한다.
     this.setState({ completed: completed >= 100 ? 0 : completed + 1 })
